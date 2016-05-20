@@ -6,7 +6,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -78,7 +84,38 @@ public class MainActivity extends AppCompatActivity {
         // check for external storage
         if (isExternalStorageAvailable()) {
             // get the URI
-            return null;
+
+            // 1. Get the external storage directory
+            File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+            // 2. Create a unique file name
+            String fileName = "";
+            String fileType = "";
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+            if (mediaType == MEDIA_TYPE_IMAGE){
+                fileName = "IMG_"+ timeStamp;
+                fileType = ".jpg";
+            } else if (mediaType == MEDIA_TYPE_VIDEO) {
+                fileName = "VID_"+ timeStamp;
+                fileType = ".mp4";
+            } else {
+                return null;
+            }
+
+            // 3. Create the file
+            File mediaFile;
+            try {
+                mediaFile = File.createTempFile(fileName, fileType, mediaStorageDir);
+                Log.i(TAG, "File: " + Uri.fromFile(mediaFile));
+
+                // 4. Return the file's URI
+                return Uri.fromFile(mediaFile);
+            }
+            catch (IOException e) {
+                Log.e(TAG, "Error creating file: " +
+                        mediaStorageDir.getAbsolutePath() + fileName + fileType);
+            }
         }
 
         // something went wrong
