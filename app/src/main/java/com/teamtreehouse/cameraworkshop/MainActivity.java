@@ -43,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (requestCode == REQUEST_TAKE_PHOTO || requestCode == REQUEST_PICK_PHOTO) {
+                if (data != null) {
+                    mMediaUri = data.getData();
+                }
+
                 Intent intent = new Intent(this, ViewImageActivity.class);
                 intent.setData(mMediaUri);
                 startActivity(intent);
@@ -92,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.pickPhoto)
     void pickPhoto() {
-
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pickPhotoIntent.setType("image/*");
+        startActivityForResult(pickPhotoIntent, REQUEST_PICK_PHOTO);
     }
 
     @OnClick(R.id.pickVideo)
