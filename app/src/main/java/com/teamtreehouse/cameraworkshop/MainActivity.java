@@ -2,6 +2,7 @@ package com.teamtreehouse.cameraworkshop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.takePhoto)
     void takePhoto() {
-
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
     }
 
     @OnClick(R.id.takeVideo)
