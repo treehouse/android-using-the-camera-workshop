@@ -57,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
                 intent.setDataAndType(mMediaUri, "video/*");
                 startActivity(intent);
             }
+            else if (requestCode == REQUEST_PICK_VIDEO) {
+                if (data != null) {
+                    Log.i(TAG, "Video content URI: " + data.getData());
+                    Toast.makeText(this, "Video content URI: " + data.getData(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_LONG).show();
@@ -103,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.pickVideo)
     void pickVideo() {
-
+        Intent pickVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pickVideoIntent.setType("video/*");
+        startActivityForResult(pickVideoIntent, REQUEST_PICK_VIDEO);
     }
 
     private Uri getOutputMediaFileUri(int mediaType) {
