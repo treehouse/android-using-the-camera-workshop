@@ -71,7 +71,18 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.takeVideo)
     void takeVideo() {
-
+        mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+        if (mMediaUri == null) {
+            Toast.makeText(this,
+                    "There was a problem accessing your device's external storage.",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+            startActivityForResult(takeVideoIntent, REQUEST_TAKE_VIDEO);
+        }
     }
 
     @OnClick(R.id.pickPhoto)
