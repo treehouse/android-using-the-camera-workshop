@@ -43,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                Intent intent = new Intent(this, ViewImageActivity.class);
+                intent.setData(mMediaUri);
+                startActivity(intent);
+            }
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_LONG).show();

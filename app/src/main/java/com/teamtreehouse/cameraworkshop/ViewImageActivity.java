@@ -1,8 +1,12 @@
 package com.teamtreehouse.cameraworkshop;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 public class ViewImageActivity extends AppCompatActivity {
 
@@ -15,6 +19,8 @@ public class ViewImageActivity extends AppCompatActivity {
 
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
 
-
+        Intent intent = getIntent();
+        Uri imageUri = intent.getData();
+        Picasso.with(this).load(imageUri).into(imageView);
     }
 }
