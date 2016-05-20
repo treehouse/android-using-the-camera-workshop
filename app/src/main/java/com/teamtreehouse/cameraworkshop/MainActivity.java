@@ -1,7 +1,9 @@
 package com.teamtreehouse.cameraworkshop;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+
+    private Uri mMediaUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,17 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.takePhoto)
     void takePhoto() {
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+        mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        if (mMediaUri == null) {
+            Toast.makeText(this,
+                    "There was a problem accessing your device's external storage.",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+            startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+        }
     }
 
     @OnClick(R.id.takeVideo)
@@ -60,4 +73,39 @@ public class MainActivity extends AppCompatActivity {
     void pickVideo() {
 
     }
+
+    private Uri getOutputMediaFileUri(int mediaType) {
+        // check for external storage
+        if (isExternalStorageAvailable()) {
+            // get the URI
+            return null;
+        }
+
+        // something went wrong
+        return null;
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
